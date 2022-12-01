@@ -1,0 +1,86 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+class Persona {
+	public: 
+		string nombre;
+		int edad;
+		
+	Persona(){
+	}
+	
+	Persona(string nombre_, int edad_){
+		this->nombre=nombre_;
+		this->edad=edad_;
+	}
+	
+	friend ostream & operator << (ostream &out,Persona &per){
+		out<<"("<<per.nombre<<","<<per.edad<<")";
+	}
+	
+	bool operator>(Persona p) { //ordenar por nombre ascendente
+		return (nombre > p.nombre)? true: false;
+	}
+	
+	bool operator<(Persona p){//ordenar por edad descendente
+		if(edad<= p.edad){
+			if(edad==p.edad){
+				return nombre > p.nombre;
+			}else{
+				return (edad< p.edad)? true: false;
+			}
+		}
+		return false;
+	}	
+};
+
+template <class T>
+void intercambiar(T &dato1, T &dato2){
+	T aux;
+	aux=dato1;
+	dato1=dato2;
+	dato2=aux;
+}
+
+template<class T> 
+void ordenar(T arreglo,int tam,bool inverso=false) { 
+	bool result;
+	for(int i=0; i<tam-1; i++){
+		for(int j=i+1; j<tam; j++){
+			result= inverso? arreglo[i]<arreglo[j]:arreglo[i]>arreglo[j];
+			if(result){
+				intercambiar(arreglo[i],arreglo[j]);
+			}
+		}
+	}
+};
+
+template<class T> 
+void mostrar(T arreglo, int tam){
+	for(int i=0; i<tam; i++){
+		cout<<arreglo[i]<<" ";
+	}
+	cout<<endl;
+}
+
+int main() { // =====================
+	float numeros[] = {645.41, 37.59, 76.41, 5.31, -34.23, 1.11, 1.10, 23.46, 635.47, -876.32, 467.83, 62.25};
+	Persona personas[]={Persona("Hal",20), Persona("Susann",31),Persona("Dwight",19),Persona("Kassandra", 21),Persona("Lawrence", 25),
+	Persona("Cindy", 22), Persona("Cory", 27),Persona("Mac", 19),Persona("Romana", 27),Persona("Doretha", 32),Persona("Danna", 20),
+	Persona("Zara", 23),Persona("Rosalyn", 26),Persona("Risa", 24),Persona("Benny", 28),Persona("Juan", 33),Persona("Natalie", 25)};
+	int cantNumeros=12;
+	int cantPersonas=17;
+  	
+  	cout<<"Ordenar numeros en ascendiente por el valor del numero"<<endl;
+	ordenar(numeros,cantNumeros);
+	mostrar(numeros,cantNumeros);
+	
+	cout<<"\n\nOrdenar las personas en orden alfabetico (lexicographically) por nomber"<<endl;
+	ordenar(personas,cantPersonas);
+	mostrar(personas,cantPersonas);
+	
+	cout<<"\n\nOrdernar las personas en orden descendiente por edad, donde una persona de la misma edad deberia estar ordenada en orden alfabetico (lexicographically)"<<endl;
+	ordenar(personas,cantPersonas,true);
+	mostrar(personas,cantPersonas);
+	return 0;
+}
